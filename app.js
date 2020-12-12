@@ -15,7 +15,7 @@ app.listen(port, () => {
 
 let credentials = JSON.parse(fs.readFileSync('credentials.json', 'utf8'));
 let connection = mysql.createConnection(credentials);
-connection.connection()
+connection.connect()
 
 // function rowToObjectYrLangSkills(row) {
 //   return {
