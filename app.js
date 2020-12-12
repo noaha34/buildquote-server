@@ -8,14 +8,16 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+let credentials = JSON.parse(fs.readFileSync('credentials.json', 'utf8'));
+let connection = mysql.createConnection(credentials);
+connection.connect();
+
 const port = 3443;
 app.listen(port, () => {
   console.log(`We're live in port ${port}!`);
 });
 
-let credentials = JSON.parse(fs.readFileSync('credentials.json', 'utf8'));
-let connection = mysql.createConnection(credentials);
-connection.connect()
+
 
 // function rowToObjectYrLangSkills(row) {
 //   return {
