@@ -13,7 +13,7 @@ app.listen(port, () => {
   console.log(`We're live in port ${port}!`);
 });
 
-let credentials = JSON.parse(fs.readFileSync('credentials.json', 'uft8'));
+let credentials = JSON.parse(fs.readFileSync('credentials.json', 'utf8'));
 let connection = mysql.createConnection(credentials);
 connection.connection()
 
