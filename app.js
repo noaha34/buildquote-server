@@ -12,13 +12,6 @@ let credentials = JSON.parse(fs.readFileSync('credentials.json', 'utf8'));
 let connection = mysql.createConnection(credentials);
 connection.connect();
 
-const port = 3443;
-app.listen(port, () => {
-  console.log(`We're live in port ${port}!`);
-});
-
-
-
 function rowToObjectYrLangSkills(row) {
   return {
     gradyr:row.gradyr,
