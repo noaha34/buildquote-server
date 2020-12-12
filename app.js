@@ -13,9 +13,9 @@ app.listen(port, () => {
   console.log(`We're live in port ${port}!`);
 });
 
-// let credentials = JSON.parse(fs.readFileSync('credentials.json', 'uft8'));
-// let connection = mysql.createConnection(credentials);
-// connection.connection()
+let credentials = JSON.parse(fs.readFileSync('credentials.json', 'uft8'));
+let connection = mysql.createConnection(credentials);
+connection.connection()
 
 // function rowToObjectYrLangSkills(row) {
 //   return {
