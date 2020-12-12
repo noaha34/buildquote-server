@@ -93,20 +93,6 @@ const port = 3443;
 app.listen(port, () => {
   console.log(`We're live on port ${port}!`);
 });
-//end of EXPRESS from profesor johnson video// // epxress with sql THIS SHOULD GO IN APP.js BUILDQuoteWS
-const cors = require('cors');
-const express = require('express');
-const mysql = require('mysql');
-const fs = require('fs');
-
-const app = express();
-app.use(express.json());
-app.use(cors());
-
-
-let credentials = JSON.parse(fs.readFileSync('credentials.json', 'uft8'));
-let connection = mysql.createConnection(credentials);
-connection.connection()
 
 function rowToObjectYrLangSkills(row) {
   return {
