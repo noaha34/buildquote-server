@@ -79,14 +79,15 @@ app.post('/Programmers/POST/testyr/:gradyr', (request, response) => {
   const query = 'INSERT INTO Programmers(full_name, gradyr, skills, passions, langs, experience, picture) VALUES (?, ?, "Web Development, Software Engineering","changing the world","Python, Chinese, Javascript, Java","3 years in college and 1 year in your woman","thispersondoesnotexist.com");';
   // const params = [request.body.full_name, request.body.gradyr, request.body.skills, request.body.passions, request.body.langs , request.body.experience, request.body.picture]; // changed this to match  buildquote db
   const params = [request.body.full_name, request.params.gradyr];
+  console.log("The data is:  " + request.body)
   connection.query(query, params, (error, result) =>{
     response.send({
       ok: true,
       id: result.insertId, // hopefull a provided function
     });
-    console.log(error);
-    console.log(request.body);
-    console.log(request);
+    // console.log(error);
+    // console.log(request.body);
+    // console.log(request);
   });
 });
 
