@@ -47,6 +47,18 @@ function rowToObject(row) {
     picture:row.picture, 
   };
 }
+app.get('/Programmers', (request, response) => { //test this out
+  const query = 'SELECT full_name, gradyr, skills, passions, langs, experience, picture, id FROM Programmers WHERE is_deleted = 0 ORDER BY id DESC, updated_at DESC'; // change ot buildwuote
+  // const params = [request.params.gradyr, request.params.skills, request.params.passions, request.params.langs, request.params.experience, request.params.picture];
+  const params = []; // THIS MIGT THROW ERROR
+
+  connection.query(query, params, (error, rows) =>{
+    response.send({
+      ok: true,
+      Programmers: rows.map(rowToObject)
+    });
+  });
+}); // add more get statements, but be cognizant of appending long strings
   //INSERT INTO Programmers (full_name, gradyr, skills, passions, langs, experience, picture) VALUES ('Tao Ren', 2021, 'Web Development, Agile Scrum', 'China', 'JS, HTML, CSS, C, Java', 'Dopest Guy In China', 'minorityprogrammers.org/img/kush.jpg');
 
 //INSERT INTO Programmers (full_name, gradyr, skills, passions, langs, experience, picture) VALUES ('Kush Gupta', 2021, 'Web Development, Agile Scrum', 'Learning', 'JS, HTML, CSS, C, Java', 'Software Engineer and Northrup Grumman', 'minorityprogrammers.org/img/kush.jpg');
@@ -59,7 +71,7 @@ app.get('/Programmers/:gradyr', (request, response) => { //test this out
   connection.query(query, params, (error, rows) =>{
     response.send({
       ok: true,
-      Programmers: rows.map(rowToObjectYr)
+      Programmers: rows.map(rowToObject)
     });
   });
 }); // add more get statements, but be cognizant of appending long strings
