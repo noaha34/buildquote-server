@@ -85,6 +85,8 @@ app.post('/Programmers/POST/testyr/:gradyr', (request, response) => {
       id: result.insertId, // hopefull a provided function
     });
     console.log(error);
+    console.log(request.body);
+    console.log(request);
   });
 });
 
