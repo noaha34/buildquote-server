@@ -76,17 +76,18 @@ app.get('/Programmers/:gradyr', (request, response) => { //test this out
   });
 }); // add more get statements, but be cognizant of appending long strings
 
-// app.post('/Programmers/', (request, response) => {
-//   const query = 'INSERT INTO Programmers(full_name, gradyr, skills, passions, langs, experience, picture) VALUES ("Tao Ren", 2020, "Web Development, Software Engineering","changing the world","Python, Chinese, Javascript, Java","3 years in college and 1 year in your woman","thispersondoesnotexist.com");';
-//   // const params = [request.body.full_name, request.body.gradyr, request.body.skills, request.body.passions, request.body.langs , request.body.experience, request.body.picture]; // changed this to match  buildquote db
-//   const params = [];
-//   connection.query(query, params, (error, result) =>{
-//     response.send({
-//       ok: true,
-//       id: result.insertID, // hopefull a provided function
-//     });
-//   });
-// });
+// default post to debug
+app.post('/Programmers/POST', (request, response) => {
+  const query = 'INSERT INTO Programmers(full_name, gradyr, skills, passions, langs, experience, picture) VALUES ("Tao Ren", 2020, "Web Development, Software Engineering","changing the world","Python, Chinese, Javascript, Java","3 years in college and 1 year in your woman","thispersondoesnotexist.com");';
+  // const params = [request.body.full_name, request.body.gradyr, request.body.skills, request.body.passions, request.body.langs , request.body.experience, request.body.picture]; // changed this to match  buildquote db
+  const params = [];
+  connection.query(query, params, (error, result) =>{
+    response.send({
+      ok: true,
+      id: result.insertID, // hopefull a provided function
+    });
+  });
+});
 // INSERT INTO Programmers(full_name, gradyr, skills, passions, langs, experience, picture) VALUES (?,?,?,?,?,?,?);
 app.post('/Programmers/', (request, response) => {
   const query = 'INSERT INTO Programmers(full_name, gradyr, skills, passions, langs, experience, picture) VALUES (?,?,?,?,?,?,?);';
