@@ -79,19 +79,19 @@ app.get('/Programmers/:gradyr', (request, response) => { //test this out
 // INSERT INTO Programmers(full_name, gradyr, skills, passions, langs, experience, picture) VALUES (?,?,?,?,?,?,?);
 app.post('/Programmers/', (request, response) => {
   const query = 'INSERT INTO Programmers(full_name, gradyr, skills, passions, langs, experience, picture) VALUES (?,?,?,?,?,?,?);';
-  const params = [request.body.gradyr, request.body.skills, request.body.passions, request.body.langssenum, request.body.skillsenum, request.body.experience, request.body.picture]; // changed this to match  buildquote db
+  const params = [request.body.full_name, request.body.gradyr, request.body.skills, request.body.passions, request.body.langs , request.body.experience, request.body.picture]; // changed this to match  buildquote db
   connection.query(query, params, (error, result) =>{
     response.send({
       ok: true,
-      id: result.insertID,
+      id: result.insertID, // hopefull a provided function
     });
   });
 });
 /// also confused as to question marks for id
 app.patch('/Programmers/:id', (request, response) => {
-  const query = 'UPDATE Programmers SET year = ?, month = ?, day = ?, message = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?';
+  const query = 'UPDATE Programmers SET full_name = ?,  gradyr = ?, skills = ?, passions = ?, langs = ?, experience = ?, picture = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?';
   // const params = [request.body.year, request.body.month, request.body.day, request.body.message, request.params.id]; // change this to match your buildquote db
-  const params = [request.body.gradyr, request.body.skills, request.body.passions, request.body.langssenum, request.body.skillsenum, request.body.experience, request.body.picture, request.params.id]; // id is params because it is input value at end of SQL statement
+  const params = [request.body.full_name, request.body.gradyr, request.body.skills, request.body.passions, request.body.langs, request.body.experience, request.body.picture, request.params.id]; // id is params because it is input value at end of SQL statement
   // changed this to match  buildquote db
 
   connection.query(query, params, (error, result) =>{
