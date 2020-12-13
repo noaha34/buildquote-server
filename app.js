@@ -84,7 +84,7 @@ app.post('/Programmers/POST/testyr/:gradyr', (request, response) => {
       ok: true,
       id: result.insertId, // hopefull a provided function
     });
-    print(error);
+    console.log(error);
   });
 });
 
@@ -98,7 +98,7 @@ app.post('/Programmers/POST/:gradyr', (request, response) => {
       ok: true,
       id: result.insertId, // hopefull a provided function
     });
-    print(error);
+    console.log(error);
   });
 });
 // default post to debug
