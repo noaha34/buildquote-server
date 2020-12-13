@@ -171,8 +171,3 @@ app.delete('/Programmers/:id', (request, response) => {
     });
   });
 });
-const port = 3443;
-app.listen(port, () => {
-  console.log(`We're live on port ${port}!`);
-});
-//end of EXPRESS from profesor johnson video
