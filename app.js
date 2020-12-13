@@ -91,7 +91,7 @@ app.post('/Programmers/POST/testyr/:gradyr', (request, response) => {
 
 
 app.post('/Programmers/POST/:gradyr', (request, response) => {
-  const query = 'INSERT INTO Programmers(full_name, gradyr, skills, passions, langs, experience, picture) VALUES ("Tao Ren", ?, "Web Development, Software Engineering","changing the world","Python, Chinese, Javascript, Java","3 years in college and 1 year in your woman","thispersondoesnotexist.com");';
+  const query = 'INSERT INTO Programmers(full_name, gradyr, skills, passions, langs, experience, picture) VALUES ("Tao Ren", ?, "Web Development, Software Engineering","changing the world","Python, Chinese, Javascript, Java","3 years in college and 1 year in your woman","thispersondoesnotexist.com")';
   // const params = [request.body.full_name, request.body.gradyr, request.body.skills, request.body.passions, request.body.langs , request.body.experience, request.body.picture]; // changed this to match  buildquote db
   const params = [request.params.gradyr];
   connection.query(query, params, (error, result) =>{
@@ -104,7 +104,7 @@ app.post('/Programmers/POST/:gradyr', (request, response) => {
 });
 // default post to debug
 app.post('/Programmers/POST', (request, response) => {
-  const query = 'INSERT INTO Programmers(full_name, gradyr, skills, passions, langs, experience, picture) VALUES ("Tao Ren", 2020, "Web Development, Software Engineering","changing the world","Python, Chinese, Javascript, Java","3 years in college and 1 year in your woman","thispersondoesnotexist.com");';
+  const query = 'INSERT INTO Programmers(full_name, gradyr, skills, passions, langs, experience, picture) VALUES ("Tao Ren", 2020, "Web Development, Software Engineering","changing the world","Python, Chinese, Javascript, Java","3 years in college and 1 year in your woman","thispersondoesnotexist.com")';
   // const params = [request.body.full_name, request.body.gradyr, request.body.skills, request.body.passions, request.body.langs , request.body.experience, request.body.picture]; // changed this to match  buildquote db
   const params = [];
   connection.query(query, params, (error, result) =>{
@@ -116,7 +116,7 @@ app.post('/Programmers/POST', (request, response) => {
 });
 // INSERT INTO Programmers(full_name, gradyr, skills, passions, langs, experience, picture) VALUES (?,?,?,?,?,?,?);
 app.post('/Programmers/', (request, response) => {
-  const query = 'INSERT INTO Programmers(full_name, gradyr, skills, passions, langs, experience, picture) VALUES (?,?,?,?,?,?,?);';
+  const query = 'INSERT INTO Programmers(full_name, gradyr, skills, passions, langs, experience, picture) VALUES (?,?,?,?,?,?,?)';
   const params = [request.body.full_name, request.body.gradyr, request.body.skills, request.body.passions, request.body.langs , request.body.experience, request.body.picture]; // changed this to match  buildquote db
   connection.query(query, params, (error, result) =>{
     response.send({
