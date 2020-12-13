@@ -1,4 +1,3 @@
-// // epxress with sql THIS SHOULD GO IN APP.js BUILDQuoteWS
 const cors = require('cors');
 const express = require('express');
 const mysql = require('mysql');
@@ -15,49 +14,54 @@ connection.connect();
 function rowToObjectYrLangSkills(row) {
   return {
     gradyr:row.gradyr,
-    langssenum:row.langssenum, // need to change based on buildquote databse
-    skillsenum:row.skillsenum,
+    langs:row.langs, // need to change based on buildquote databse
+    skills:row.skills,
   };
 }
+// SCHEMA
+// id SERIAL PRIMARY KEY, 
+// full_name TEXT,
+// gradyr INT DEFAULT 0,
+// skills TEXT,
+// passions TEXT,
+// langs TEXT,
+// experience TEXT,
+// picture TEXT,
+// is_deleted INT DEFAULT 0,
+// created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+// updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 
 function rowToObject(row) {
   return {
-    gradyr:row.gradyr,
+    full_name: row.full_name,
+    gradyr: row.gradyr,
     skills: row.skills,
     passions: row.passions,
-    langssenum:row.langssenum, // need to change based on buildquote databse
-    skillsenum:row.skillsenum,
+    langs:row.langs, 
     experience:row.experience,
-    picture:row.picture, // not sure if unchanged valued like created_at, id, or is_delted are applied here
+    picture:row.picture, 
   };
 }
-// gradyr, skills, passions, langssenum, skillsenum, experience, picture
-app.get('/Programmers/:gradyr/:langssenum/:skillsenum', (request, response) => {
-  const query = 'SELECT gradyr, skills, passions, langssenum, skillsenum, experience, picture, id FROM memory WHERE is_deleted = 0 AND gradyr = ? AND langssenum = ? AND skillsenum = ? ORDER BY id DESC, updated_at DESC'; // change ot buildwuote
-  const params = [request.params.gradyr, request.params.skills, request.params.passions, request.params.langssenum, request.params.skillsenum, request.params.experience, request.params.picture];
+  //INSERT INTO Programmers (full_name, gradyr, skills, passions, langs, experience, picture) VALUES ('Tao Ren', 2021, 'Web Development, Agile Scrum', 'China', 'JS, HTML, CSS, C, Java', 'Dopest Guy In China', 'minorityprogrammers.org/img/kush.jpg');
+
+//INSERT INTO Programmers (full_name, gradyr, skills, passions, langs, experience, picture) VALUES ('Kush Gupta', 2021, 'Web Development, Agile Scrum', 'Learning', 'JS, HTML, CSS, C, Java', 'Software Engineer and Northrup Grumman', 'minorityprogrammers.org/img/kush.jpg');
+//INSERT INTO Programmers (full_name, gradyr, skills, passions, langs, experience, picture) VALUES ('Chris Johnson', 2012, 'Web Development, 3D Developments', 'Teaching', 'JS, HTML, CSS, C++, madeup.xyz', 'Professor', 'twodee.org/imgs/me_small_circle.png');
+app.get('/Programmers/:gradyr', (request, response) => { //test this out
+  const query = 'SELECT full_name, gradyr, skills, passions, langs, experience, picture, id FROM Programmers WHERE is_deleted = 0 AND gradyr = ? ORDER BY id DESC, updated_at DESC'; // change ot buildwuote
+  // const params = [request.params.gradyr, request.params.skills, request.params.passions, request.params.langs, request.params.experience, request.params.picture];
+  const params = [request.params.gradyr];
 
   connection.query(query, params, (error, rows) =>{
     response.send({
       ok: true,
-      Programmers: rows.map(rowToObjectYrLangSkills),// change moeries
+      Programmers: rows.map(rowToObjectYrLangSkills)
     });
   });
-});
-// this one has way to many params to get
-app.get('/Programmers/:gradyr/:skills/:passions/:langssenum/:skillsenum/:experience/:picture', (request, response) => {
-  const query = 'SELECT gradyr, skills, passions, langssenum, skillsenum, experience, picture, id FROM memory WHERE is_deleted = 0 AND gradyr = ? AND skills = ? AND passions = ? AND langssenum = ? AND skillsenum = ? AND experience = ? AND picture = ? ORDER BY id DESC, updated_at DESC'; // change ot buildwuote
-  const params = [request.params.gradyr, request.params.skills, request.params.passions, request.params.langssenum, request.params.skillsenum, request.params.experience, request.params.picture];
+}); // add more get statements, but be cognizant of appending long strings
 
-  connection.query(query, params, (error, rows) =>{
-    response.send({
-      ok: true,
-      Programmers: rows.map(rowToObject),// change moeries
-    });
-  });
-});
-
+// INSERT INTO Programmers(full_name, gradyr, skills, passions, langs, experience, picture) VALUES (?,?,?,?,?,?,?);
 app.post('/Programmers/', (request, response) => {
-  const query = 'INSERT INTO Programmers(gradyr, skills, langssenum, skillsenum, experience, picture) VALUES (?,?,?,?,?,?)';
+  const query = 'INSERT INTO Programmers(full_name, gradyr, skills, passions, langs, experience, picture) VALUES (?,?,?,?,?,?,?);';
   const params = [request.body.gradyr, request.body.skills, request.body.passions, request.body.langssenum, request.body.skillsenum, request.body.experience, request.body.picture]; // changed this to match  buildquote db
   connection.query(query, params, (error, result) =>{
     response.send({
@@ -94,49 +98,8 @@ app.listen(port, () => {
   console.log(`We're live on port ${port}!`);
 });
 
-function rowToObjectYrLangSkills(row) {
-  return {
-    gradyr:row.gradyr,
-    langssenum:row.langssenum, // need to change based on buildquote databse
-    skillsenum:row.skillsenum,
-  };
-}
 
-function rowToObject(row) {
-  return {
-    gradyr:row.gradyr,
-    skills: row.skills,
-    passions: row.passions,
-    langssenum:row.langssenum, // need to change based on buildquote databse
-    skillsenum:row.skillsenum,
-    experience:row.experience,
-    picture:row.picture, // not sure if unchanged valued like created_at, id, or is_delted are applied here
-  };
-}
-// gradyr, skills, passions, langssenum, skillsenum, experience, picture
-app.get('/Programmers/:gradyr/:langssenum/:skillsenum', (request, response) => {
-  const query = 'SELECT gradyr, skills, passions, langssenum, skillsenum, experience, picture, id FROM memory WHERE is_deleted = 0 AND gradyr = ? AND langssenum = ? AND skillsenum = ? ORDER BY id DESC, updated_at DESC'; // change ot buildwuote
-  const params = [request.params.gradyr, request.params.skills, request.params.passions, request.params.langssenum, request.params.skillsenum, request.params.experience, request.params.picture];
-
-  connection.query(query, params, (error, rows) =>{
-    response.send({
-      ok: true,
-      Programmers: rows.map(rowToObjectYrLangSkills),// change moeries
-    });
-  });
-});
-// this one has way to many params to get
-app.get('/Programmers/:gradyr/:skills/:passions/:langssenum/:skillsenum/:experience/:picture', (request, response) => {
-  const query = 'SELECT gradyr, skills, passions, langssenum, skillsenum, experience, picture, id FROM memory WHERE is_deleted = 0 AND gradyr = ? AND skills = ? AND passions = ? AND langssenum = ? AND skillsenum = ? AND experience = ? AND picture = ? ORDER BY id DESC, updated_at DESC'; // change ot buildwuote
-  const params = [request.params.gradyr, request.params.skills, request.params.passions, request.params.langssenum, request.params.skillsenum, request.params.experience, request.params.picture];
-
-  connection.query(query, params, (error, rows) =>{
-    response.send({
-      ok: true,
-      Programmers: rows.map(rowToObject),// change moeries
-    });
-  });
-});
+//
 
 app.post('/Programmers/', (request, response) => {
   const query = 'INSERT INTO Programmers(gradyr, skills, langssenum, skillsenum, experience, picture) VALUES (?,?,?,?,?,?)';
