@@ -18,6 +18,11 @@ function rowToObjectYrLangSkills(row) {
     skills:row.skills,
   };
 }
+function rowToObjectYr(row) {
+  return {
+    gradyr:row.gradyr,
+  };
+}
 // SCHEMA
 // id SERIAL PRIMARY KEY, 
 // full_name TEXT,
@@ -54,7 +59,7 @@ app.get('/Programmers/:gradyr', (request, response) => { //test this out
   connection.query(query, params, (error, rows) =>{
     response.send({
       ok: true,
-      Programmers: rows.map(rowToObjectYrLangSkills)
+      Programmers: rows.map(rowToObjectYr)
     });
   });
 }); // add more get statements, but be cognizant of appending long strings
