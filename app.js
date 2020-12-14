@@ -65,7 +65,7 @@ app.get('/Programmers', (request, response) => { //test this out
   app.get('/Programmers/:id', (request, response) => { //test this out
     const query = 'SELECT full_name, gradyr, skills, passions, langs, experience, picture, id FROM Programmers WHERE is_deleted = 0 ORDER BY id DESC, updated_at DESC'; // change ot buildwuote
     // const params = [request.params.gradyr, request.params.skills, request.params.passions, request.params.langs, request.params.experience, request.params.picture];
-    const params = [id]; // THIS MIGT THROW ERROR
+    const params = [request.params.id]; // THIS MIGT THROW ERROR
   
     connection.query(query, params, (error, rows) =>{
       response.send({
