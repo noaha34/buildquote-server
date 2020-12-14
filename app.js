@@ -38,7 +38,6 @@ function rowToObjectYr(row) {
 
 function rowToObject(row) {
   return {
-    id: row.id,
     full_name: row.full_name,
     gradyr: row.gradyr,
     skills: row.skills,
@@ -46,6 +45,7 @@ function rowToObject(row) {
     langs:row.langs, 
     experience:row.experience,
     picture:row.picture, 
+    id: row.id,
   };
 }
 app.get('/Programmers', (request, response) => { //test this out
