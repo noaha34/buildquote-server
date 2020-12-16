@@ -48,6 +48,117 @@ function rowToObject(row) {
     id: row.id,
   };
 }
+
+app.get('/Programmers', (request, response) => { // FETCH ALL PROGRAMMERS FROM DATABSE
+  const query = 'SELECT full_name, gradyr, skills, passions, langs, experience, picture, id FROM Programmers WHERE is_deleted = 0 ORDER BY id DESC, updated_at DESC'; // change ot buildwuote
+  const params = [];
+  connection.query(query, params, (error, rows) =>{
+    response.send({
+      ok: true,
+      Programmers: rows.map(rowToObject)
+    });
+  });
+}); 
+
+  app.get('/Programmers/id/:id', (request, response) => { // GET PROGRAMMER BY INDIVIDUAL ID
+    const query = 'SELECT full_name, gradyr, skills, passions, langs, experience, picture, id FROM Programmers WHERE is_deleted = 0 AND id = ? ORDER BY id DESC, updated_at DESC'; // change ot buildwuote
+    const params = [request.params.id];
+    connection.query(query, params, (error, rows) =>{
+      response.send({
+        ok: true,
+        Programmers: rows.map(rowToObject)
+      });
+    });
+  });
+app.get('/Programmers/:gradyr', (request, response) => { // GET BY GRADUATION YEAR
+  const query = 'SELECT full_name, gradyr, skills, passions, langs, experience, picture, id FROM Programmers WHERE is_deleted = 0 AND gradyr = ? ORDER BY id DESC, updated_at DESC'; // change ot buildwuote
+  // const params = [request.params.gradyr, request.params.skills, request.params.passions, request.params.langs, request.params.experience, request.params.picture];
+  const params = [request.params.gradyr];
+
+  connection.query(query, params, (error, rows) =>{
+    response.send({
+      ok: true,
+      Programmers: rows.map(rowToObject)
+    });
+  });
+});
+
+
+
+app.post('/Programmers/', (request, response) => {
+  const query = 'INSERT INTO Programmers(full_name, gradyr, skills, passions, langs, experience, picture) VALUES (?,?,?,?,?,?,?)';
+  const params = [request.body.full_name, request.body.gradyr, request.body.skills, request.body.passions, request.body.langs , request.body.experience, request.body.picture]; // changed this to match  buildquote db
+  connection.query(query, params, (error, result) =>{
+    response.send({
+      ok: true,
+      id: result.insertId,
+    });
+  });
+});
+app.patch('/Programmers/:id', (request, response) => {
+  const query = 'UPDATE Programmers SET full_name = ?,  gradyr = ?, skills = ?, passions = ?, langs = ?, experience = ?, picture = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?';
+  const params = [request.body.full_name, request.body.gradyr, request.body.skills, request.body.passions, request.body.langs, request.body.experience, request.body.picture, request.params.id]; // id is params because it is input value at end of SQL statement
+
+  connection.query(query, params, (error, result) =>{
+    response.send({
+      ok: true,
+    });
+  });
+});
+
+app.delete('/Programmers/:id', (request, response) => {
+  const query = 'UPDATE Programmers SET is_deleted = 1,  updated_at = CURRENT_TIMESTAMP WHERE id = ?';  // soft delete not using delete command, just changing boolean
+  const params = [request.params.id]; // change this to match your buildquote db
+  connection.query(query, params, (error, result) =>{
+    response.send({
+      ok: true,
+    });
+  });
+});
+const port = 3443;
+app.listen(port, () => {
+  console.log(`We're live on port ${port}!`);
+});
+
+
+app.post('/Programmers/', (request, response) => {
+  const query = 'INSERT INTO Programmers(gradyr, skills, langs, skills, experience, picture) VALUES (?,?,?,?,?,?)';
+  const params = [request.body.gradyr, request.body.skills, request.body.passions, request.body.langs, request.body.skills, request.body.experience, request.body.picture]; // changed this to match  buildquote db
+  connection.query(query, params, (error, result) =>{
+    response.send({
+      ok: true,
+      id: result.insertId,
+    });
+  });
+});
+/// also confused as to question marks for id
+app.patch('/Programmers/:id', (request, response) => {
+  const query = 'UPDATE Programmers SET year = ?, month = ?, day = ?, message = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?';
+  const params = [request.body.gradyr, request.body.skills, request.body.passions, request.body.langs, request.body.skills, request.body.experience, request.body.picture, request.params.id]; // id is params because it is input value at end of SQL statement
+
+
+  connection.query(query, params, (error, result) =>{
+    response.send({
+      ok: true,
+    });
+  });
+});
+
+app.delete('/Programmers/:id', (request, response) => {
+  const query = 'UPDATE Programmers SET is_deleted = 1,  updated_at = CURRENT_TIMESTAMP WHERE id = ?';  // soft delete not using delete command, just changing boolean
+  const params = [request.params.id];
+  connection.query(query, params, (error, result) =>{
+    response.send({
+      ok: true,
+    });
+  });
+});
+
+
+
+
+// SEARCH TEST ENDPOINTS // IGNORE LATER USE
+
 app.get('/Programmers/search/name/param/perc', (request, response) => { //test this out
   // const query = 'SELECT full_name, gradyr, skills, passions, langs, experience, picture, id FROM Programmers WHERE is_deleted = 0 ORDER BY id DESC, updated_at DESC'; // change ot buildwuote
   const query = "SELECT full_name, gradyr, skills, passions, langs, experience, picture, id FROM Programmers WHERE is_deleted = 0 and full_name LIKE %?%  ORDER BY id DESC, updated_at DESC"; // change ot buildwuote
@@ -185,144 +296,3 @@ app.get('/Programmers/search', (request, response) => { //test this out
     });
   });
 }); 
-app.get('/Programmers', (request, response) => { //test this out
-  const query = 'SELECT full_name, gradyr, skills, passions, langs, experience, picture, id FROM Programmers WHERE is_deleted = 0 ORDER BY id DESC, updated_at DESC'; // change ot buildwuote
-  // const params = [request.params.gradyr, request.params.skills, request.params.passions, request.params.langs, request.params.experience, request.params.picture];
-  const params = [];
-  connection.query(query, params, (error, rows) =>{
-    response.send({
-      ok: true,
-      Programmers: rows.map(rowToObject)
-    });
-  });
-}); // add more get statements, but be cognizant of appending long strings
-  //INSERT INTO Programmers (full_name, gradyr, skills, passions, langs, experience, picture) VALUES ('Tao Ren', 2021, 'Web Development, Agile Scrum', 'China', 'JS, HTML, CSS, C, Java', 'Dopest Guy In China', 'minorityprogrammers.org/img/kush.jpg');
-
-  app.get('/Programmers/id/:id', (request, response) => { //test this out
-    const query = 'SELECT full_name, gradyr, skills, passions, langs, experience, picture, id FROM Programmers WHERE is_deleted = 0 AND gradyr = ? ORDER BY id DESC, updated_at DESC'; // change ot buildwuote
-    // const params = [request.params.gradyr, request.params.skills, request.params.passions, request.params.langs, request.params.experience, request.params.picture];
-    const params = [request.params.id]; // THIS MIGT THROW ERROR
-  
-    connection.query(query, params, (error, rows) =>{
-      response.send({
-        ok: true,
-        Programmers: rows.map(rowToObject)
-      });
-    });
-  });
-//INSERT INTO Programmers (full_name, gradyr, skills, passions, langs, experience, picture) VALUES ('Kush Gupta', 2021, 'Web Development, Agile Scrum', 'Learning', 'JS, HTML, CSS, C, Java', 'Software Engineer and Northrup Grumman', 'minorityprogrammers.org/img/kush.jpg');
-//INSERT INTO Programmers (full_name, gradyr, skills, passions, langs, experience, picture) VALUES ('Chris Johnson', 2012, 'Web Development, 3D Developments', 'Teaching', 'JS, HTML, CSS, C++, madeup.xyz', 'Professor', 'twodee.org/imgs/me_small_circle.png');
-app.get('/Programmers/:gradyr', (request, response) => { //test this out
-  const query = 'SELECT full_name, gradyr, skills, passions, langs, experience, picture, id FROM Programmers WHERE is_deleted = 0 AND gradyr = ? ORDER BY id DESC, updated_at DESC'; // change ot buildwuote
-  // const params = [request.params.gradyr, request.params.skills, request.params.passions, request.params.langs, request.params.experience, request.params.picture];
-  const params = [request.params.gradyr];
-
-  connection.query(query, params, (error, rows) =>{
-    response.send({
-      ok: true,
-      Programmers: rows.map(rowToObject)
-    });
-  });
-}); // add more get statements, but be cognizant of appending long strings
-
-
-
-app.post('/Programmers/POST/:gradyr', (request, response) => {
-  const query = 'INSERT INTO Programmers(full_name, gradyr, skills, passions, langs, experience, picture) VALUES ("Tao Ren", ?, "Web Development, Software Engineering","changing the world","Python, Chinese, Javascript, Java","3 years in college and 1 year in your woman","thispersondoesnotexist.com")';
-  // const params = [request.body.full_name, request.body.gradyr, request.body.skills, request.body.passions, request.body.langs , request.body.experience, request.body.picture]; // changed this to match  buildquote db
-  const params = [request.params.gradyr];
-  connection.query(query, params, (error, result) =>{
-    response.send({
-      ok: true,
-      id: result.insertId, // hopefull a provided function
-    });
-    console.log(error);
-  });
-});
-// default post to debug
-app.post('/Programmers/POST', (request, response) => {
-  const query = 'INSERT INTO Programmers(full_name, gradyr, skills, passions, langs, experience, picture) VALUES ("Tao Ren", 2020, "Web Development, Software Engineering","changing the world","Python, Chinese, Javascript, Java","3 years in college and 1 year in your woman","thispersondoesnotexist.com")';
-  // const params = [request.body.full_name, request.body.gradyr, request.body.skills, request.body.passions, request.body.langs , request.body.experience, request.body.picture]; // changed this to match  buildquote db
-  const params = [];
-  connection.query(query, params, (error, result) =>{
-    response.send({
-      ok: true,
-      id: result.insertId, // hopefull a provided function
-    });
-  });
-});
-// INSERT INTO Programmers(full_name, gradyr, skills, passions, langs, experience, picture) VALUES (?,?,?,?,?,?,?);
-app.post('/Programmers/', (request, response) => {
-  const query = 'INSERT INTO Programmers(full_name, gradyr, skills, passions, langs, experience, picture) VALUES (?,?,?,?,?,?,?)';
-  const params = [request.body.full_name, request.body.gradyr, request.body.skills, request.body.passions, request.body.langs , request.body.experience, request.body.picture]; // changed this to match  buildquote db
-  connection.query(query, params, (error, result) =>{
-    response.send({
-      ok: true,
-      id: result.insertId, // hopefull a provided function
-    });
-  });
-});
-/// also confused as to question marks for id
-app.patch('/Programmers/:id', (request, response) => {
-  const query = 'UPDATE Programmers SET full_name = ?,  gradyr = ?, skills = ?, passions = ?, langs = ?, experience = ?, picture = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?';
-  // const params = [request.body.year, request.body.month, request.body.day, request.body.message, request.params.id]; // change this to match your buildquote db
-  const params = [request.body.full_name, request.body.gradyr, request.body.skills, request.body.passions, request.body.langs, request.body.experience, request.body.picture, request.params.id]; // id is params because it is input value at end of SQL statement
-  // changed this to match  buildquote db
-
-  connection.query(query, params, (error, result) =>{
-    response.send({
-      ok: true,
-    });
-  });
-});
-
-app.delete('/Programmers/:id', (request, response) => {
-  const query = 'UPDATE Programmers SET is_deleted = 1,  updated_at = CURRENT_TIMESTAMP WHERE id = ?';  // soft delete not using delete command, just changing boolean
-  const params = [request.params.id]; // change this to match your buildquote db
-  connection.query(query, params, (error, result) =>{
-    response.send({
-      ok: true,
-    });
-  });
-});
-const port = 3443;
-app.listen(port, () => {
-  console.log(`We're live on port ${port}!`);
-});
-
-
-//
-
-app.post('/Programmers/', (request, response) => {
-  const query = 'INSERT INTO Programmers(gradyr, skills, langs, skills, experience, picture) VALUES (?,?,?,?,?,?)';
-  const params = [request.body.gradyr, request.body.skills, request.body.passions, request.body.langs, request.body.skills, request.body.experience, request.body.picture]; // changed this to match  buildquote db
-  connection.query(query, params, (error, result) =>{
-    response.send({
-      ok: true,
-      id: result.insertId,
-    });
-  });
-});
-/// also confused as to question marks for id
-app.patch('/Programmers/:id', (request, response) => {
-  const query = 'UPDATE Programmers SET year = ?, month = ?, day = ?, message = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?';
-  // const params = [request.body.year, request.body.month, request.body.day, request.body.message, request.params.id]; // change this to match your buildquote db
-  const params = [request.body.gradyr, request.body.skills, request.body.passions, request.body.langs, request.body.skills, request.body.experience, request.body.picture, request.params.id]; // id is params because it is input value at end of SQL statement
-  // changed this to match  buildquote db
-
-  connection.query(query, params, (error, result) =>{
-    response.send({
-      ok: true,
-    });
-  });
-});
-
-app.delete('/Programmers/:id', (request, response) => {
-  const query = 'UPDATE Programmers SET is_deleted = 1,  updated_at = CURRENT_TIMESTAMP WHERE id = ?';  // soft delete not using delete command, just changing boolean
-  const params = [request.params.id]; // change this to match your buildquote db
-  connection.query(query, params, (error, result) =>{
-    response.send({
-      ok: true,
-    });
-  });
-});
