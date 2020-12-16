@@ -51,7 +51,7 @@ function rowToObject(row) {
 app.get('/Programmers/search/name/param', (request, response) => { //test this out
   // const query = 'SELECT full_name, gradyr, skills, passions, langs, experience, picture, id FROM Programmers WHERE is_deleted = 0 ORDER BY id DESC, updated_at DESC'; // change ot buildwuote
   const query = "SELECT full_name, gradyr, skills, passions, langs, experience, picture, id FROM Programmers WHERE is_deleted = 0 and full_name LIKE %?%  ORDER BY id DESC, updated_at DESC"; // change ot buildwuote
-  let a = 'a'
+  let a = 'a';
   // const query = "SELECT full_name, gradyr, skills, passions, langs, experience, picture, id FROM Programmers WHERE is_deleted = 0 and gradyr = ? and full_name LIKE %?% ORDER BY id DESC, updated_at DESC"; // change ot buildwuote
   // const params = [request.body.full_name];
   // const params = [request.body.gradyr, request.body.full_name]; // changed this to match  buildquote db
