@@ -53,9 +53,9 @@ app.get('/Programmers/search/name', (request, response) => { //test this out
   // const query = "SELECT full_name, gradyr, skills, passions, langs, experience, picture, id FROM Programmers WHERE is_deleted = 0 and full_name LIKE %?%  ORDER BY id DESC, updated_at DESC"; // change ot buildwuote
 
   // const query = "SELECT full_name, gradyr, skills, passions, langs, experience, picture, id FROM Programmers WHERE is_deleted = 0 and gradyr = ? and full_name LIKE %?% ORDER BY id DESC, updated_at DESC"; // change ot buildwuote
-  const params = [request.body.full_name];
+  // const params = [request.body.full_name];
   // const params = [request.body.gradyr, request.body.full_name]; // changed this to match  buildquote db
-  // const params = []; 
+  const params = []; 
 
   // const params = [request.body.gradyr, request.body.skills, request.body.passions, request.body.langs, request.body.skills, request.body.experience, request.body.picture]; // changed this to match  buildquote db
   connection.query(query, params, (error, rows) =>{
