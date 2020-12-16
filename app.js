@@ -31,6 +31,7 @@ function reviewToRow(row) {
 
 function rowToObjectYrLangSkills(row) {
   return {
+    id: row.id,
     gradyr:row.gradyr,
     langs:row.langs, // need to change based on buildquote databse
     skills:row.skills,
@@ -68,23 +69,23 @@ function rowToObject(row) {
 }
 /// REVIEW REST
 app.get('/Reviews', (request, response) => { // FETCH ALL PROGRAMMERS FROM DATABSE
-  const query = 'SELECT rating, name, description, created_at FROM Reviews WHERE is_deleted = 0 ORDER BY id DESC, updated_at DESC'; // change ot buildwuote
+  const query = 'SELECT id rating, name, description, created_at FROM Reviews WHERE is_deleted = 0 ORDER BY id DESC, updated_at DESC'; // change ot buildwuote
   const params = [];
   connection.query(query, params, (error, rows) =>{
     response.send({
       ok: true,
-      Reviews: rows.map(rowToObject)
+      Reviews: rows.map(reviewToRow)
     });
   });
 }); 
 // To filter by rating
 app.get('/Reviews/rating/:low/:high', (request, response) => { // FETCH ALL PROGRAMMERS FROM DATABSE
-  const query = 'SELECT rating, name, description, created_at FROM Reviews WHERE is_deleted = 0  and rating >= ? and rating <= ? ORDER BY id DESC, updated_at DESC'; // change ot buildwuote
+  const query = 'SELECT id, rating, name, description, created_at FROM Reviews WHERE is_deleted = 0  and rating >= ? and rating <= ? ORDER BY id DESC, updated_at DESC'; // change ot buildwuote
   const params = [request.params.low, request.param.high];
   connection.query(query, params, (error, rows) =>{
     response.send({
       ok: true,
-      Reviews: rows.map(rowToObject)
+      Reviews: rows.map(reviewToRow)
     });
   });
 }); 
