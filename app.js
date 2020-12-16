@@ -11,6 +11,24 @@ let credentials = JSON.parse(fs.readFileSync('credentials.json', 'utf8'));
 let connection = mysql.createConnection(credentials);
 connection.connect();
 
+
+// REVIEW SCHEMS
+
+    // rating INT DEFAULT 10,
+    // name TEXT,
+    // description TEXT,
+    // is_deleted INT DEFAULT 0,
+    // created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    // updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+function reviewToRow(row) {
+  return {
+    rating:row.rating,
+    name:row.name,
+    description:row.description, // need to change based on buildquote databse
+    created_at:row.created_at,
+  };
+}
+
 function rowToObjectYrLangSkills(row) {
   return {
     gradyr:row.gradyr,
@@ -48,6 +66,58 @@ function rowToObject(row) {
     id: row.id,
   };
 }
+/// REVIEW REST
+app.get('/Reviews', (request, response) => { // FETCH ALL PROGRAMMERS FROM DATABSE
+  const query = 'SELECT rating, name, description, created_at FROM Reviews WHERE is_deleted = 0 ORDER BY id DESC, updated_at DESC'; // change ot buildwuote
+  const params = [];
+  connection.query(query, params, (error, rows) =>{
+    response.send({
+      ok: true,
+      Reviews: rows.map(rowToObject)
+    });
+  });
+}); 
+// To filter by rating
+app.get('/Reviews/rating/:low/:high', (request, response) => { // FETCH ALL PROGRAMMERS FROM DATABSE
+  const query = 'SELECT rating, name, description, created_at FROM Reviews WHERE is_deleted = 0  and rating >= ? and rating <= ? ORDER BY id DESC, updated_at DESC'; // change ot buildwuote
+  const params = [request.params.low, request.param.high];
+  connection.query(query, params, (error, rows) =>{
+    response.send({
+      ok: true,
+      Reviews: rows.map(rowToObject)
+    });
+  });
+}); 
+
+app.post('/Reviews/', (request, response) => {
+  const query = 'INSERT INTO Reviews(rating, name, description) VALUES (?,?,?)';
+  const params = [request.body.rating, request.body.name, request.body.description]; // id is params because it is input value at end of SQL statement
+  connection.query(query, params, (error, result) =>{
+    response.send({
+      ok: true,
+      id: result.insertId,
+    });
+  });
+});
+app.patch('/Reviews/:id', (request, response) => {
+  const query = 'UPDATE Reviews SET rating = ?, name = ?, description = ?,  updated_at = CURRENT_TIMESTAMP WHERE id = ?';
+  const params = [request.body.rating, request.body.name, request.body.description, request.params.id]; // id is params because it is input value at end of SQL statement
+  connection.query(query, params, (error, result) =>{
+    response.send({
+      ok: true,
+    });
+  });
+});
+
+app.delete('/Reviews/:id', (request, response) => {
+  const query = 'UPDATE Reviews SET is_deleted = 1,  updated_at = CURRENT_TIMESTAMP WHERE id = ?';  // soft delete not using delete command, just changing boolean
+  const params = [request.params.id];
+  connection.query(query, params, (error, result) =>{
+    response.send({
+      ok: true,
+    });
+  });
+});
 
 app.get('/Programmers', (request, response) => { // FETCH ALL PROGRAMMERS FROM DATABSE
   const query = 'SELECT full_name, gradyr, skills, passions, langs, experience, picture, id FROM Programmers WHERE is_deleted = 0 ORDER BY id DESC, updated_at DESC'; // change ot buildwuote
@@ -131,7 +201,6 @@ app.post('/Programmers/', (request, response) => {
     });
   });
 });
-/// also confused as to question marks for id
 app.patch('/Programmers/:id', (request, response) => {
   const query = 'UPDATE Programmers SET year = ?, month = ?, day = ?, message = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?';
   const params = [request.body.gradyr, request.body.skills, request.body.passions, request.body.langs, request.body.skills, request.body.experience, request.body.picture, request.params.id]; // id is params because it is input value at end of SQL statement
@@ -153,7 +222,6 @@ app.delete('/Programmers/:id', (request, response) => {
     });
   });
 });
-
 
 
 
