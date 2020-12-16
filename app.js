@@ -49,9 +49,13 @@ function rowToObject(row) {
   };
 }
 app.get('/Programmers/search', (request, response) => { //test this out
-  const query = "SELECT full_name, gradyr, skills, passions, langs, experience, picture, id FROM Programmers WHERE is_deleted = 0 and gradyr = ? and full_name LIKE %?% ORDER BY id DESC, updated_at DESC"; // change ot buildwuote
+  const query = 'SELECT full_name, gradyr, skills, passions, langs, experience, picture, id FROM Programmers WHERE is_deleted = 0 ORDER BY id DESC, updated_at DESC'; // change ot buildwuote
+
+  // const query = "SELECT full_name, gradyr, skills, passions, langs, experience, picture, id FROM Programmers WHERE is_deleted = 0 and gradyr = ? and full_name LIKE %?% ORDER BY id DESC, updated_at DESC"; // change ot buildwuote
   // const params = [request.params.gradyr, request.params.skills, request.params.passions, request.params.langs, request.params.experience, request.params.picture];
-  const params = [request.body.gradyr, request.body.full_name]; // changed this to match  buildquote db
+  // const params = [request.body.gradyr, request.body.full_name]; // changed this to match  buildquote db
+  const params = []; 
+
   // const params = [request.body.gradyr, request.body.skills, request.body.passions, request.body.langs, request.body.skills, request.body.experience, request.body.picture]; // changed this to match  buildquote db
   connection.query(query, params, (error, rows) =>{
     response.send({
@@ -63,8 +67,7 @@ app.get('/Programmers/search', (request, response) => { //test this out
 app.get('/Programmers', (request, response) => { //test this out
   const query = 'SELECT full_name, gradyr, skills, passions, langs, experience, picture, id FROM Programmers WHERE is_deleted = 0 ORDER BY id DESC, updated_at DESC'; // change ot buildwuote
   // const params = [request.params.gradyr, request.params.skills, request.params.passions, request.params.langs, request.params.experience, request.params.picture];
-  const params = []; // THIS MIGT THROW ERROR
-
+  const params = [];
   connection.query(query, params, (error, rows) =>{
     response.send({
       ok: true,
