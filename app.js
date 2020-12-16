@@ -48,6 +48,18 @@ function rowToObject(row) {
     id: row.id,
   };
 }
+app.get('/Programmers/search', (request, response) => { //test this out
+  const query = "SELECT full_name, gradyr, skills, passions, langs, experience, picture, id FROM Programmers WHERE is_deleted = 0 and gradyr = ? and full_name LIKE %?% ORDER BY id DESC, updated_at DESC"; // change ot buildwuote
+  // const params = [request.params.gradyr, request.params.skills, request.params.passions, request.params.langs, request.params.experience, request.params.picture];
+  const params = [request.body.gradyr, request.body.full_name]; // changed this to match  buildquote db
+  // const params = [request.body.gradyr, request.body.skills, request.body.passions, request.body.langs, request.body.skills, request.body.experience, request.body.picture]; // changed this to match  buildquote db
+  connection.query(query, params, (error, rows) =>{
+    response.send({
+      ok: true,
+      Programmers: rows.map(rowToObject)
+    });
+  });
+}); 
 app.get('/Programmers', (request, response) => { //test this out
   const query = 'SELECT full_name, gradyr, skills, passions, langs, experience, picture, id FROM Programmers WHERE is_deleted = 0 ORDER BY id DESC, updated_at DESC'; // change ot buildwuote
   // const params = [request.params.gradyr, request.params.skills, request.params.passions, request.params.langs, request.params.experience, request.params.picture];
@@ -63,7 +75,7 @@ app.get('/Programmers', (request, response) => { //test this out
   //INSERT INTO Programmers (full_name, gradyr, skills, passions, langs, experience, picture) VALUES ('Tao Ren', 2021, 'Web Development, Agile Scrum', 'China', 'JS, HTML, CSS, C, Java', 'Dopest Guy In China', 'minorityprogrammers.org/img/kush.jpg');
 
   app.get('/Programmers/id/:id', (request, response) => { //test this out
-    const query = 'SELECT full_name, gradyr, skills, passions, langs, experience, picture, id FROM Programmers WHERE is_deleted = 0 ORDER BY id DESC, updated_at DESC'; // change ot buildwuote
+    const query = 'SELECT full_name, gradyr, skills, passions, langs, experience, picture, id FROM Programmers WHERE is_deleted = 0 AND gradyr = ? ORDER BY id DESC, updated_at DESC'; // change ot buildwuote
     // const params = [request.params.gradyr, request.params.skills, request.params.passions, request.params.langs, request.params.experience, request.params.picture];
     const params = [request.params.id]; // THIS MIGT THROW ERROR
   
@@ -88,19 +100,7 @@ app.get('/Programmers/:gradyr', (request, response) => { //test this out
     });
   });
 }); // add more get statements, but be cognizant of appending long strings
-app.post('/Programmers/POST/testyr/:gradyr', (request, response) => {
-  const query = 'INSERT INTO Programmers(full_name, gradyr, skills, passions, langs, experience, picture) VALUES (?, ?, "Web Development, Software Engineering","changing the world","Python, Chinese, Javascript, Java","3 years in college and 1 year in your woman","thispersondoesnotexist.com")';
-  // const params = [request.body.full_name, request.body.gradyr, request.body.skills, request.body.passions, request.body.langs , request.body.experience, request.body.picture]; // changed this to match  buildquote db
-  const params = [request.body.full_name, request.params.gradyr];
-  console.log("The data is:  " + request.body + "the full_name param is" + request.body.full_name);
-  console.log("");
-  connection.query(query, params, (error, result) =>{
-    response.send({
-      ok: true,
-      id: result.insertId, // hopefull a provided function
-    });
-  });
-});
+
 
 
 app.post('/Programmers/POST/:gradyr', (request, response) => {
@@ -170,8 +170,8 @@ app.listen(port, () => {
 //
 
 app.post('/Programmers/', (request, response) => {
-  const query = 'INSERT INTO Programmers(gradyr, skills, langssenum, skillsenum, experience, picture) VALUES (?,?,?,?,?,?)';
-  const params = [request.body.gradyr, request.body.skills, request.body.passions, request.body.langssenum, request.body.skillsenum, request.body.experience, request.body.picture]; // changed this to match  buildquote db
+  const query = 'INSERT INTO Programmers(gradyr, skills, langs, skills, experience, picture) VALUES (?,?,?,?,?,?)';
+  const params = [request.body.gradyr, request.body.skills, request.body.passions, request.body.langs, request.body.skills, request.body.experience, request.body.picture]; // changed this to match  buildquote db
   connection.query(query, params, (error, result) =>{
     response.send({
       ok: true,
@@ -183,7 +183,7 @@ app.post('/Programmers/', (request, response) => {
 app.patch('/Programmers/:id', (request, response) => {
   const query = 'UPDATE Programmers SET year = ?, month = ?, day = ?, message = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?';
   // const params = [request.body.year, request.body.month, request.body.day, request.body.message, request.params.id]; // change this to match your buildquote db
-  const params = [request.body.gradyr, request.body.skills, request.body.passions, request.body.langssenum, request.body.skillsenum, request.body.experience, request.body.picture, request.params.id]; // id is params because it is input value at end of SQL statement
+  const params = [request.body.gradyr, request.body.skills, request.body.passions, request.body.langs, request.body.skills, request.body.experience, request.body.picture, request.params.id]; // id is params because it is input value at end of SQL statement
   // changed this to match  buildquote db
 
   connection.query(query, params, (error, result) =>{
